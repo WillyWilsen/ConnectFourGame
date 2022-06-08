@@ -7,9 +7,6 @@ class Bot13520160:
     def __init__(self) -> None:
         pass
 
-    def isValidReturn(self, state: State, col: int):
-        return (state.board.__getitem__(pos=[0,col]).color != ColorConstant.BLACK)
-
     def find(self, state: State, player: int, thinking_time: float) -> int:
         """
         [DESC]
@@ -37,46 +34,116 @@ class Bot13520160:
                         # PRIORITY ATTACK VERTICAL
                         if (state.board.__getitem__(pos=[i - 1, j]).color == player_color and 
                         state.board.__getitem__(pos=[i - 2, j]).color == player_color and state.board.__getitem__(pos=[i - 3, j]).color != other_color):
-                            if (self.isValidReturn(state, j)):
+                            if (state.board.__getitem__(pos=[0, j]).color == ColorConstant.BLACK):
                                 return j
                         
                         # PRIORITY ATTACK DIAGONAL
-                        if (j >= 0 and j < 4):
+                        if (j > 0 and j < 4):
                             if (state.board.__getitem__(pos=[i - 1, j + 1]).color == player_color and 
-                            state.board.__getitem__(pos=[i - 2, j + 2]).color == player_color and state.board.__getitem__(pos=[i - 3, j + 3]).color != other_color):
-                                if (state.board.__getitem__(pos=[i - 2, j + 3]).color != ColorConstant.BLACK):
-                                    if (self.isValidReturn(state, j + 3)):
-                                        return j + 3
+                            state.board.__getitem__(pos=[i - 2, j + 2]).color == player_color):
+                                if (i != 5):
+                                    if (state.board.__getitem__(pos=[i + 1, j - 1]).color == ColorConstant.BLACK and state.board.__getitem__(pos=[0, j - 1]).color == ColorConstant.BLACK):
+                                        if (i == 4):
+                                            return j - 1
+                                        else:
+                                            if (state.board.__getitem__(pos=[i + 2, j - 1]).color != ColorConstant.BLACK):
+                                                return j - 1
+
+                                if (state.board.__getitem__(pos=[i - 2, j + 3]).color != ColorConstant.BLACK and
+                                state.board.__getitem__(pos=[i - 3, j + 3]).color != other_color and state.board.__getitem__(pos=[0, j + 3]).color == ColorConstant.BLACK):
+                                    return j + 3
+                            else:
+                                if (state.board.__getitem__(pos=[i - 1, j + 1]).color == player_color and 
+                                state.board.__getitem__(pos=[i - 2, j + 2]).color != other_color and state.board.__getitem__(pos=[i - 3, j + 3]).color == player_color):
+                                    if (state.board.__getitem__(pos=[i - 1, j + 2]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j + 2]).color == ColorConstant.BLACK):
+                                        return j + 2
+                                else:
+                                    if (state.board.__getitem__(pos=[i - 1, j + 1]).color != other_color and 
+                                    state.board.__getitem__(pos=[i - 2, j + 2]).color == player_color and state.board.__getitem__(pos=[i - 3, j + 3]).color == player_color):
+                                        if (state.board.__getitem__(pos=[i, j + 1]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j + 1]).color == ColorConstant.BLACK):
+                                            return j + 1
                         
-                        if (j > 2 and j <= 6):
+                        if (j > 2 and j < 6):
                             if (state.board.__getitem__(pos=[i - 1, j - 1]).color == player_color and 
-                            state.board.__getitem__(pos=[i - 2, j - 2]).color == player_color and state.board.__getitem__(pos=[i - 3, j - 3]).color == other_color):
-                                if (state.board.__getitem__(pos=[i - 2, j - 3]).color != ColorConstant.BLACK):
-                                    if (self.isValidReturn(state, j - 3)):
-                                        return j - 3
+                            state.board.__getitem__(pos=[i - 2, j - 2]).color == player_color):
+                                if (i != 5):
+                                    if (state.board.__getitem__(pos=[i + 1, j + 1]).color == ColorConstant.BLACK and state.board.__getitem__(pos=[0, j + 1]).color == ColorConstant.BLACK):
+                                        if (i == 4):
+                                            return j + 1
+                                        else:
+                                            if (state.board.__getitem__(pos=[i + 2, j + 1]).color != ColorConstant.BLACK):
+                                                return j + 1
+                                                
+                                if (state.board.__getitem__(pos=[i - 2, j - 3]).color != ColorConstant.BLACK and 
+                                state.board.__getitem__(pos=[i - 3, j - 3]).color != other_color and state.board.__getitem__(pos=[0, j - 3]).color == ColorConstant.BLACK):
+                                    return j - 3
+                            else:
+                                if (state.board.__getitem__(pos=[i - 1, j - 1]).color == player_color and 
+                                state.board.__getitem__(pos=[i - 2, j - 2]).color != other_color and state.board.__getitem__(pos=[i - 3, j - 3]).color == player_color):
+                                    if (state.board.__getitem__(pos=[i - 1, j - 2]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j - 2]).color == ColorConstant.BLACK):
+                                        return j - 2
+                                else:
+                                    if (state.board.__getitem__(pos=[i - 1, j - 1]).color != other_color and 
+                                    state.board.__getitem__(pos=[i - 2, j - 2]).color == player_color and state.board.__getitem__(pos=[i - 3, j - 3]).color == player_color):
+                                        if (state.board.__getitem__(pos=[i, j - 1]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j - 2]).color == ColorConstant.BLACK):
+                                            return j - 1
 
                     # PRIORITY ATTACK HORIZONTAL
                     if (j >= 0 and j < 4):
                         if (state.board.__getitem__(pos=[i, j + 1]).color == player_color and 
                         state.board.__getitem__(pos=[i, j + 2]).color == player_color and state.board.__getitem__(pos=[i, j + 3]).color != other_color):
-                            if (i == 5):
-                                if (self.isValidReturn(state, j + 3)):
+                            if (state.board.__getitem__(pos=[0, j + 3]).color == ColorConstant.BLACK):
+                                if (i == 5):
                                     return j + 3
-                            else:
-                                if (state.board.__getitem__(pos=[i + 1, j + 3]).color != ColorConstant.BLACK):
-                                    if (self.isValidReturn(state, j + 3)):
+                                else:
+                                    if (state.board.__getitem__(pos=[i + 1, j + 3]).color != ColorConstant.BLACK):
                                         return j + 3
+                        else:
+                            if (state.board.__getitem__(pos=[i, j + 1]).color == player_color and 
+                            state.board.__getitem__(pos=[i, j + 2]).color != other_color and state.board.__getitem__(pos=[i, j + 3]).color == player_color):
+                                if (state.board.__getitem__(pos=[0, j + 2]).color == ColorConstant.BLACK):
+                                    if (i == 5):
+                                        return j + 2
+                                    else:
+                                        if (state.board.__getitem__(pos=[i + 1, j + 2]).color != ColorConstant.BLACK):
+                                            return j + 2
+                            else:
+                                if (state.board.__getitem__(pos=[i, j + 1]).color != other_color and 
+                                state.board.__getitem__(pos=[i, j + 2]).color == player_color and state.board.__getitem__(pos=[i, j + 3]).color == player_color):
+                                    if (state.board.__getitem__(pos=[0, j + 1]).color == ColorConstant.BLACK):
+                                        if (i == 5):
+                                            return j + 1
+                                        else:
+                                            if (state.board.__getitem__(pos=[i + 1, j + 1]).color != ColorConstant.BLACK):
+                                                return j + 1
 
                     if (j > 2 and j <= 6):
                         if (state.board.__getitem__(pos=[i, j - 1]).color == player_color and 
                         state.board.__getitem__(pos=[i, j - 2]).color == player_color and state.board.__getitem__(pos=[i, j - 3]).color != other_color):
-                            if (i == 5):
-                                if (self.isValidReturn(state, j - 3)):
+                            if (state.board.__getitem__(pos=[0, j - 3]).color == ColorConstant.BLACK):
+                                if (i == 5):
                                     return j - 3
-                            else:
-                                if (state.board.__getitem__(pos=[i + 1, j - 3]).color != ColorConstant.BLACK):
-                                    if (self.isValidReturn(state, j - 3)):
+                                else:
+                                    if (state.board.__getitem__(pos=[i + 1, j - 3]).color != ColorConstant.BLACK):
                                         return j - 3
+                        else:
+                            if (state.board.__getitem__(pos=[i, j - 1]).color == player_color and 
+                            state.board.__getitem__(pos=[i, j - 2]).color != other_color and state.board.__getitem__(pos=[i, j - 3]).color == player_color):
+                                if (state.board.__getitem__(pos=[0, j - 2]).color == ColorConstant.BLACK):
+                                    if (i == 5):
+                                        return j - 2
+                                    else:
+                                        if (state.board.__getitem__(pos=[i + 1, j - 2]).color != ColorConstant.BLACK):
+                                            return j - 2
+                            else:
+                                if (state.board.__getitem__(pos=[i, j - 1]).color != other_color and 
+                                state.board.__getitem__(pos=[i, j - 2]).color == player_color and state.board.__getitem__(pos=[i, j - 3]).color == player_color):
+                                    if (state.board.__getitem__(pos=[0, j - 1]).color == ColorConstant.BLACK):
+                                        if (i == 5):
+                                            return j - 1
+                                        else:
+                                            if (state.board.__getitem__(pos=[i + 1, j - 1]).color != ColorConstant.BLACK):
+                                                return j - 1
 
         # DEFEND
         for i in range(state.board.row):
@@ -86,43 +153,56 @@ class Bot13520160:
                         # DEFEND VERTICAL
                         if (state.board.__getitem__(pos=[i - 1, j]).color != player_color and 
                         state.board.__getitem__(pos=[i + 1, j]).color == other_color and state.board.__getitem__(pos=[i + 2, j]).color == other_color):
-                            if (self.isValidReturn(state, j)):
+                            if (state.board.__getitem__(pos=[0, j]).color == ColorConstant.BLACK):
                                 return j
 
                         # DEFEND DIAGONAL
                         if (j > 0 and j < 4):
                             if (state.board.__getitem__(pos=[i - 1, j - 1]).color != player_color and 
                             state.board.__getitem__(pos=[i + 1, j + 1]).color == other_color and state.board.__getitem__(pos=[i + 2, j + 2]).color == other_color):
-                                if (state.board.__getitem__(pos=[i, j - 1]).color != ColorConstant.BLACK):
-                                    if (self.isValidReturn(state, j - 1)):
-                                        return j - 1
+                                if (state.board.__getitem__(pos=[i, j - 1]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j - 1]).color == ColorConstant.BLACK):
+                                    return j - 1
+                            
+                                if (state.board.__getitem__(pos=[i + 3, j + 3]).color == ColorConstant.BLACK and state.board.__getitem__(pos=[0, j + 3]).color == ColorConstant.BLACK):
+                                    if (i != 3):
+                                        return j + 3
+                                    else:
+                                        if (state.board.__getitem__(pos=[i + 4, j + 3]).color != ColorConstant.BLACK):
+                                            return j + 3
                         
                         if (j > 2 and j < 6):
                             if (state.board.__getitem__(pos=[i - 1, j + 1]).color != player_color and 
                             state.board.__getitem__(pos=[i + 1, j - 1]).color == other_color and state.board.__getitem__(pos=[i + 2, j - 2]).color == other_color):
-                                if (state.board.__getitem__(pos=[i, j + 1]).color != ColorConstant.BLACK):
-                                    if (self.isValidReturn(state, j + 1)):
-                                        return j + 1
+                                if (state.board.__getitem__(pos=[i, j + 1]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j + 1]).color == ColorConstant.BLACK):
+                                    return j + 1
+
+                                if (state.board.__getitem__(pos=[i + 3, j - 3]).color == ColorConstant.BLACK and state.board.__getitem__(pos=[0, j - 3]).color == ColorConstant.BLACK):
+                                    if (i != 3):
+                                        return j - 3
+                                    else:
+                                        if (state.board.__getitem__(pos=[i + 4, j - 3]).color != ColorConstant.BLACK):
+                                            return j - 3
 
                     # DEFEND HORIZONTAL
-                    if (state.board.__getitem__(pos=[i, 3]).color == ColorConstant.BLACK and self.isValidReturn(state, 3)):
-                        if (i != 5):
-                            if (state.board.__getitem__(pos=[i + 1, 3]).color != ColorConstant.BLACK):
+                    if (state.board.__getitem__(pos=[i, 3]).color == ColorConstant.BLACK):
+                        if (state.board.__getitem__(pos=[0, 3]).color == ColorConstant.BLACK):
+                            if (i != 5):
+                                if (state.board.__getitem__(pos=[i + 1, 3]).color != ColorConstant.BLACK):
+                                    return 3
+                            else:
                                 return 3
-                        else:
-                            return 3
                     else:
                         if (j > 0 and j < 4):
                             if (state.board.__getitem__(pos=[i, j - 1]).color != player_color and 
                             (state.board.__getitem__(pos=[i, j + 1]).color == other_color or state.board.__getitem__(pos=[i, j + 2]).color == other_color)):
-                                if (state.board.__getitem__(pos=[i, j + 1]).color != other_color and self.isValidReturn(state, j + 1)):
+                                if (state.board.__getitem__(pos=[i, j + 1]).color == ColorConstant.BLACK and state.board.__getitem__(pos=[0, j + 1]).color == ColorConstant.BLACK):
                                     if (i == 5):
                                         return j + 1
                                     else:
                                         if (state.board.__getitem__(pos=[i + 1, j + 1]).color != ColorConstant.BLACK):
                                             return j + 1
 
-                                if (state.board.__getitem__(pos=[i, j - 1]).color != other_color and self.isValidReturn(state, j - 1)):
+                                if (state.board.__getitem__(pos=[i, j - 1]).color == ColorConstant.BLACK and state.board.__getitem__(pos=[0, j - 1]).color == ColorConstant.BLACK):
                                     if (i == 5):
                                         return j - 1
                                     else:
@@ -132,14 +212,14 @@ class Bot13520160:
                         if (j > 2 and j < 6):
                             if (state.board.__getitem__(pos=[i, j + 1]).color != player_color and 
                             (state.board.__getitem__(pos=[i, j - 1]).color == other_color or state.board.__getitem__(pos=[i, j - 2]).color == other_color)):
-                                if (state.board.__getitem__(pos=[i, j - 1]).color != other_color and self.isValidReturn(state, j - 1)):
+                                if (state.board.__getitem__(pos=[i, j - 1]).color == ColorConstant.BLACK and state.board.__getitem__(pos=[0, j - 1]).color == ColorConstant.BLACK):
                                     if (i == 5):
                                         return j - 1
                                     else:
                                         if (state.board.__getitem__(pos=[i + 1, j - 1]).color != ColorConstant.BLACK):
                                             return j - 1
 
-                                if (state.board.__getitem__(pos=[i, j + 1]).color != other_color and self.isValidReturn(state, j + 1)):
+                                if (state.board.__getitem__(pos=[i, j + 1]).color == ColorConstant.BLACK and state.board.__getitem__(pos=[0, j + 1]).color == ColorConstant.BLACK):
                                     if (i == 5):
                                         return j + 1
                                     else:
@@ -154,58 +234,68 @@ class Bot13520160:
                         # ATTACK VERTICAL
                         if (state.board.__getitem__(pos=[i - 1, j]).color != other_color and 
                         state.board.__getitem__(pos=[i - 2, j]).color != other_color and state.board.__getitem__(pos=[i - 3, j]).color != other_color):
-                            if (self.isValidReturn(state, j)):
+                            if (state.board.__getitem__(pos=[0, j]).color == ColorConstant.BLACK):
                                 return j
 
                         # ATTACK DIAGONAL
-                        if (j >= 0 and j < 4):
+                        if (j > 0 and j < 4):
                             if (state.board.__getitem__(pos=[i - 1, j + 1]).color != other_color and 
                             state.board.__getitem__(pos=[i - 2, j + 2]).color != other_color and state.board.__getitem__(pos=[i - 3, j + 3]).color != other_color):
+                                if (i != 5):
+                                    if (state.board.__getitem__(pos=[i + 1, j - 1]).color == ColorConstant.BLACK and state.board.__getitem__(pos=[0, j - 1]).color == ColorConstant.BLACK):
+                                        if (i == 4):
+                                            return j - 1
+                                        else:
+                                            if (state.board.__getitem__(pos=[i + 2, j - 1]).color != ColorConstant.BLACK):
+                                                return j - 1
+
                                 if (state.board.__getitem__(pos=[i - 1, j + 1]).color != player_color):
-                                    if (state.board.__getitem__(pos=[i, j + 1]).color != ColorConstant.BLACK):
-                                        if (self.isValidReturn(state, j + 1)):
-                                            return j + 1
+                                    if (state.board.__getitem__(pos=[i, j + 1]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j + 1]).color == ColorConstant.BLACK):
+                                        return j + 1
                                 else:
                                     if (state.board.__getitem__(pos=[i - 2, j + 2]).color != player_color):
-                                        if (state.board.__getitem__(pos=[i - 1, j + 2]).color != ColorConstant.BLACK):
-                                            if (self.isValidReturn(state, j + 2)):
-                                                return j + 2
+                                        if (state.board.__getitem__(pos=[i - 1, j + 2]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j + 2]).color == ColorConstant.BLACK):
+                                            return j + 2
                                     else:
                                         if (state.board.__getitem__(pos=[i - 3, j + 3]).color != player_color):
-                                            if (state.board.__getitem__(pos=[i - 2, j + 3]).color != ColorConstant.BLACK):
-                                                if (self.isValidReturn(state, j + 3)):
-                                                    return j + 3
+                                            if (state.board.__getitem__(pos=[i - 2, j + 3]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j + 3]).color == ColorConstant.BLACK):
+                                                return j + 3
                         
-                        if (j > 2 and j <= 6):
+                        if (j > 2 and j < 6):
                             if (state.board.__getitem__(pos=[i - 1, j - 1]).color != other_color and 
-                            state.board.__getitem__(pos=[i - 2, j - 2]).color != other_color and state.board.__getitem__(pos=[i - 3, j - 3]).color == other_color):
+                            state.board.__getitem__(pos=[i - 2, j - 2]).color != other_color and state.board.__getitem__(pos=[i - 3, j - 3]).color != other_color):
+                                if (i != 5):
+                                    if (state.board.__getitem__(pos=[i + 1, j + 1]).color == ColorConstant.BLACK and state.board.__getitem__(pos=[0, j + 1]).color == ColorConstant.BLACK):
+                                        if (i == 4):
+                                            return j + 1
+                                        else:
+                                            if (state.board.__getitem__(pos=[i + 2, j + 1]).color != ColorConstant.BLACK):
+                                                return j + 1
+
                                 if (state.board.__getitem__(pos=[i - 1, j - 1]).color != player_color):
-                                    if (state.board.__getitem__(pos=[i, j - 1]).color != ColorConstant.BLACK):
-                                        if (self.isValidReturn(state, j - 1)):
-                                            return j - 1
+                                    if (state.board.__getitem__(pos=[i, j - 1]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j - 1]).color == ColorConstant.BLACK):
+                                        return j - 1
                                 else:
                                     if (state.board.__getitem__(pos=[i - 2, j - 2]).color != player_color):
-                                        if (state.board.__getitem__(pos=[i - 1, j - 2]).color != ColorConstant.BLACK):
-                                            if (self.isValidReturn(state, j - 2)):
-                                                return j - 2
+                                        if (state.board.__getitem__(pos=[i - 1, j - 2]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j - 2]).color == ColorConstant.BLACK):
+                                            return j - 2
                                     else:
                                         if (state.board.__getitem__(pos=[i - 3, j - 3]).color != player_color):
-                                            if (state.board.__getitem__(pos=[i - 2, j - 3]).color != ColorConstant.BLACK):
-                                                if (self.isValidReturn(state, j - 3)):
-                                                    return j - 3
+                                            if (state.board.__getitem__(pos=[i - 2, j - 3]).color != ColorConstant.BLACK and state.board.__getitem__(pos=[0, j - 3]).color == ColorConstant.BLACK):
+                                                return j - 3
 
                     # ATTACK HORIZONTAL
                     if (j >= 0 and j < 4):
                         if (state.board.__getitem__(pos=[i, j + 1]).color != other_color and 
                         state.board.__getitem__(pos=[i, j + 2]).color != other_color and state.board.__getitem__(pos=[i, j + 3]).color != other_color):
-                            if (state.board.__getitem__(pos=[i, j + 2]).color != player_color and self.isValidReturn(state, j + 2)):
+                            if (state.board.__getitem__(pos=[i, j + 2]).color != player_color and state.board.__getitem__(pos=[0, j + 2]).color == ColorConstant.BLACK):
                                 if (i == 5):
                                     return j + 2
                                 else:
                                     if (state.board.__getitem__(pos=[i + 1, j + 2]).color != ColorConstant.BLACK):
                                         return j + 2
 
-                            if (state.board.__getitem__(pos=[i, j + 1]).color != player_color and self.isValidReturn(state, j + 1)):
+                            if (state.board.__getitem__(pos=[i, j + 1]).color != player_color and state.board.__getitem__(pos=[0, j + 1]).color == ColorConstant.BLACK):
                                 if (i == 5):
                                     return j + 1
                                 else:
@@ -215,22 +305,36 @@ class Bot13520160:
                     if (j > 2 and j <= 6):
                         if (state.board.__getitem__(pos=[i, j - 1]).color != other_color and 
                         state.board.__getitem__(pos=[i, j - 2]).color != other_color and state.board.__getitem__(pos=[i, j - 3]).color != other_color):
-                            if (state.board.__getitem__(pos=[i, j - 2]).color != player_color and self.isValidReturn(state, j - 2)):
+                            if (state.board.__getitem__(pos=[i, j - 2]).color != player_color and state.board.__getitem__(pos=[0, j - 2]).color == ColorConstant.BLACK):
                                 if (i == 5):
                                     return j - 2
                                 else:
                                     if (state.board.__getitem__(pos=[i + 1, j - 2]).color != ColorConstant.BLACK):
                                         return j - 2
 
-                            if (state.board.__getitem__(pos=[i, j - 1]).color != player_color and self.isValidReturn(state, j -1)):
+                            if (state.board.__getitem__(pos=[i, j - 1]).color != player_color and state.board.__getitem__(pos=[0, j - 1]).color == ColorConstant.BLACK):
                                 if (i == 5):
                                     return j - 1
                                 else:
                                     if (state.board.__getitem__(pos=[i + 1, j - 1]).color != ColorConstant.BLACK):
                                         return j - 1
 
-        # RETURN
-        if (self.isValidReturn(state, 3)):
+        if (state.board.__getitem__(pos=[0, 3]).color == ColorConstant.BLACK):
             return 3
         else:
-            return random.randint(0, 6)
+            if (state.board.__getitem__(pos=[0, 2]).color == ColorConstant.BLACK):
+                return 2
+            else:
+                if (state.board.__getitem__(pos=[0, 4]).color == ColorConstant.BLACK):
+                    return 4
+                else:
+                    if (state.board.__getitem__(pos=[0, 1]).color == ColorConstant.BLACK):
+                        return 1
+                    else:
+                        if (state.board.__getitem__(pos=[0, 5]).color == ColorConstant.BLACK):
+                            return 5
+                        else:
+                            if (state.board.__getitem__(pos=[0, 0]).color == ColorConstant.BLACK):
+                                return 0
+                            else:
+                                return 6
